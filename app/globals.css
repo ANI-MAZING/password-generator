@@ -1,26 +1,438 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0e0e10;
+  --surface: #18181b;
+  --surface2: #222226;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.16);
+  --text: #f4f4f5;
+  --text-muted: #71717a;
+  --text-hint: #3f3f46;
+  --accent: #22d3a0;
+  --accent-dim: rgba(34,211,160,0.12);
+  --accent-dim2: rgba(34,211,160,0.22);
+  --danger: #E24B4A;
+  --warn: #EF9F27;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 99px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  /* Subtle dot grid background */
+  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── Card ──────────────────────────────────────── */
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.card-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--text);
+}
+
+.card-header p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* ── Tabs ──────────────────────────────────────── */
+.tabs {
+  display: flex;
+  background: var(--surface2);
+  border-radius: var(--radius);
+  padding: 4px;
+  gap: 2px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 4px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  border: 0.5px solid var(--border-hover);
+}
+
+/* ── Password display ──────────────────────────── */
+.pw-display {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.pw-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-dim) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: var(--radius);
+}
+
+.pw-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 16px;
+  color: var(--text);
+  word-break: break-all;
+  text-align: center;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Strength ──────────────────────────────────── */
+.strength-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bars {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+
+.bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+
+.strength-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 68px;
+  text-align: right;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Options section ───────────────────────────── */
+.opts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Slider ────────────────────────────────────── */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  min-width: 46px;
+}
+
+.slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  outline: none;
+  border: 0.5px solid var(--border);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  transition: box-shadow 0.15s;
+}
+
+.slider:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px var(--accent-dim2);
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+}
+
+.slider-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  min-width: 24px;
+  text-align: right;
+}
+
+/* ── Check cards ───────────────────────────────── */
+.check-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.check-card {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: 'Syne', sans-serif;
+}
+
+.check-card:hover:not(.disabled) {
+  border-color: var(--border-hover);
+}
+
+.check-card.checked {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.check-card.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 0.5px solid var(--border-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.checkbox.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.check-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.check-hint {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── Toggles ───────────────────────────────────── */
+.toggle-row {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-family: 'Syne', sans-serif;
+  transition: border-color 0.15s;
+}
+
+.toggle-row:hover {
+  border-color: var(--border-hover);
+}
+
+.toggle-track {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--text-hint);
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.toggle-track.on {
+  background: var(--accent);
+}
+
+.toggle-knob {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s;
+}
+
+.toggle-track.on .toggle-knob {
+  left: 19px;
+}
+
+.toggle-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.toggle-hint {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── Buttons ───────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 0.25rem;
+}
+
+.btn-generate {
+  flex: 2;
+  padding: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  border: none;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0e0e10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn-generate:hover {
+  opacity: 0.88;
+}
+
+.btn-generate:active {
+  transform: scale(0.97);
+}
+
+.btn-copy {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface2);
+  border: 0.5px solid var(--border-hover);
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.btn-copy:hover:not(:disabled) {
+  background: var(--border);
+}
+
+.btn-copy.copied {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.btn-copy:active {
+  transform: scale(0.97);
+}
+
+.btn-copy:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
